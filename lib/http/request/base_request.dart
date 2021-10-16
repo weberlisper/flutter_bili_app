@@ -25,10 +25,9 @@ abstract class BaseRequest {
     }
     // http和https的切换
     if (useHttps) {
-      /// TODO 为啥pathStr里面拼接了pathParams这里还要？
-      uri = Uri.https(authority(), pathStr, pathParams);
+      uri = Uri.https(authority(), pathStr, params);
     } else {
-      uri = Uri.http(authority(), pathStr, pathParams);
+      uri = Uri.http(authority(), pathStr, params);
     }
 
     print("url:${uri.toString()}");
