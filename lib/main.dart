@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
 import 'package:flutter_bili_app/http/request/test_request.dart';
 
@@ -53,8 +54,16 @@ class _MyHomePageState extends State<MyHomePage> {
   _incrementCounter() async {
     TestRequest request = TestRequest();
     request.add("aa", "ddd").add("bb", "333");
-    var result = await HiNet.getInstance().fire(request);
-    print(result);
+    try {
+      var result = await HiNet.getInstance().fire(request);
+      print(result);
+    } on NeedAuth catch(e) {
+      print(e);
+    } on NeedLogin catch(e) {
+      print(e);
+    } on HiNetError catch(e) {
+      print(e);
+    }
     // setState(() {
     //   // This call to setState tells the Flutter framework that something has
     //   // changed in this State, which causes it to rerun the build method below
