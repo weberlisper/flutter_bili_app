@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bili_app/db/hi_cache.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
 import 'package:flutter_bili_app/http/request/test_request.dart';
@@ -51,17 +52,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  @override
+  void initState() {
+    HiCache.preInit();
+  }
+
   _incrementCounter() async {
     TestRequest request = TestRequest();
-    request.add("aa", "ddd").add("bb", "333");
+    request.add("aa", "ddd").add("bb", "333").add("requestPrams", "kkkk");
     try {
       var result = await HiNet.getInstance().fire(request);
       print(result);
-    } on NeedAuth catch(e) {
+    } on NeedAuth catch (e) {
       print(e);
-    } on NeedLogin catch(e) {
+    } on NeedLogin catch (e) {
       print(e);
-    } on HiNetError catch(e) {
+    } on HiNetError catch (e) {
       print(e);
     }
     // setState(() {

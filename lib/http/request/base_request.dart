@@ -3,8 +3,8 @@ enum HttpMethod { GET, POST, DELETE }
 /// 基础请求
 
 abstract class BaseRequest {
-  var pathParams;
   var useHttps = true;
+  dynamic body;
 
   String authority() => "api.devio.org";
 
@@ -14,20 +14,11 @@ abstract class BaseRequest {
 
   String url() {
     Uri uri;
-    var pathStr = path();
-    // 拼接path参数
-    if (pathParams != null) {
-      if (path().endsWith("/")) {
-        pathStr = "${path()}$pathParams";
-      } else {
-        pathStr = "${path()}/$pathParams";
-      }
-    }
     // http和https的切换
     if (useHttps) {
-      uri = Uri.https(authority(), pathStr, params);
+      uri = Uri.https(authority(), path(), params);
     } else {
-      uri = Uri.http(authority(), pathStr, params);
+      uri = Uri.http(authority(), path(), params);
     }
 
     print("url:${uri.toString()}");
@@ -44,10 +35,10 @@ abstract class BaseRequest {
     return this;
   }
 
-  Map<String, String> header = Map();
+  Map<String, String> headers = Map();
 
   BaseRequest addHeader(String k, Object v) {
-    params[k] = v.toString();
+    headers[k] = v.toString();
     return this;
   }
 }
