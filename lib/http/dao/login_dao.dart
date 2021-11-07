@@ -1,0 +1,41 @@
+import 'package:flutter_bili_app/db/hi_cache.dart';
+import 'package:flutter_bili_app/http/core/hi_net.dart';
+import 'package:flutter_bili_app/http/request/base_request.dart';
+import 'package:flutter_bili_app/http/request/login_request.dart';
+import 'package:flutter_bili_app/http/request/register_request.dart';
+
+class LoginDao {
+  static const BOARDING_PASS = "boarding-pass";
+
+  static login(String userName, String password) {
+    return _send(userName, password);
+  }
+
+  static register(
+      String userName, String password, String imoocId, String orderId) {
+    return _send(userName, password, imoocId: imoocId, orderId: orderId);
+  }
+
+  static _send(String userName, String password, {imoocId, orderId}) async {
+    BaseRequest request;
+    if (imoocId != null && orderId != null) {
+      request = RegisterRequest();
+    } else {
+      request = LoginRequest();
+    }
+    request.add("userName", userName);
+    request.add("password", password);
+    request.add("imoocId", imoocId);
+    request.add("orderId", orderId);
+    var result = await HiNet.getInstance().fire(request);
+    print(result);
+    if (result['code'] == 0 && result['data'] != null) {
+      HiCache.getInstance().setString(BOARDING_PASS, result['data']);
+    }
+    return result;
+  }
+
+  static getBoardingPass() {
+    return HiCache.getInstance().get(BOARDING_PASS);
+  }
+}

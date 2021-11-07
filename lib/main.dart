@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bili_app/db/hi_cache.dart';
 import 'package:flutter_bili_app/http/core/hi_error.dart';
 import 'package:flutter_bili_app/http/core/hi_net.dart';
+import 'package:flutter_bili_app/http/dao/login_dao.dart';
 import 'package:flutter_bili_app/http/request/test_request.dart';
 
 void main() {
@@ -58,18 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _incrementCounter() async {
-    TestRequest request = TestRequest();
-    request.add("aa", "ddd").add("bb", "333").add("requestPrams", "kkkk");
-    try {
-      var result = await HiNet.getInstance().fire(request);
-      print(result);
-    } on NeedAuth catch (e) {
-      print(e);
-    } on NeedLogin catch (e) {
-      print(e);
-    } on HiNetError catch (e) {
-      print(e);
-    }
+    // TestRequest request = TestRequest();
+    // request.add("aa", "ddd").add("bb", "333").add("requestPrams", "kkkk");
+    // try {
+    //   var result = await HiNet.getInstance().fire(request);
+    //   print(result);
+    // } on NeedAuth catch (e) {
+    //   print(e);
+    // } on NeedLogin catch (e) {
+    //   print(e);
+    // } on HiNetError catch (e) {
+    //   print(e);
+    // }
     // setState(() {
     //   // This call to setState tells the Flutter framework that something has
     //   // changed in this State, which causes it to rerun the build method below
@@ -78,6 +79,17 @@ class _MyHomePageState extends State<MyHomePage> {
     //   // called again, and so nothing would appear to happen.
     //   _counter++;
     // });
+    testRegister();
+  }
+
+  void testRegister() async {
+    try {
+      var result = await LoginDao.register('userName', 'password', '11223', '5566');
+    } on NeedAuth catch(e) {
+      print(e);
+    } on HiNetError catch(e) {
+      print(e);
+    }
   }
 
   @override
